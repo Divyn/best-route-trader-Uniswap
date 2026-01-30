@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Trade Router</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 180px;
+            background-color: #0d0d12;
+            border-right: 1px solid #1a1a24;
+            padding: 16px 0;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px 20px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top bar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            border-bottom: 1px solid #1a1a24;
+            background-color: #0d0d12;
+        }
+
+        .pair-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .network-badge {
+            font-size: 12px;
+            color: #666;
+            padding-left: 12px;
+            border-left: 1px solid #333;
+        }
+
+        .status-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-green {
+            background-color: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+        }
+
+        .badge-red {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        .block-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .block-number {
+            font-family: monospace;
+        }
+
+        .liquidity-state {
+            color: #22c55e;
+            font-weight: 500;
+        }
+
+        /* Content area - horizontal layout: form left, slippage right; no vertical stacking */
+        .content {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 24px;
+            padding: 24px 20px;
+            flex: 1;
+            overflow: auto;
+            align-items: flex-start;
+            max-width: 100%;
+        }
+
+        .content-left {
+            flex: 0 0 auto;
+            min-width: 320px;
+            max-width: 420px;
+        }
+
+        .content-right {
+            flex: 1 1 auto;
+            min-width: 280px;
+            overflow-x: auto;
+        }
+
+        /* Cards */
+        .card {
+            background-color: #12121a;
+            border: 1px solid #1e1e2e;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        /* Trade Configuration */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .select-box {
+            background-color: #1a1a24;
+            border: 1px solid #2a2a3a;
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 14px;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .token-pair-row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .token-pair-row .token-pair-group {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+
+        .token-pair-group {
+            margin-bottom: 0;
+        }
+
+        .token-select-standalone select {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            flex: 1;
+            width: 100%;
+        }
+        .token-select-standalone select option {
+            background: #1a1a24;
+            color: #fff;
+        }
+
+        .hint {
+            color: #888;
+            font-size: 12px;
+            margin-top: -8px;
+            margin-bottom: 16px;
+        }
+
+        .token-input {
+            display: flex;
+            align-items: center;
+            background-color: #1a1a24;
+            border: 1px solid #2a2a3a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .token-select {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background-color: #252530;
+            cursor: pointer;
+            min-width: 100px;
+        }
+
+        .token-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2775ca, #1a5fb4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .token-icon.eth {
+            background: linear-gradient(135deg, #627eea, #454a75);
+        }
+
+        .token-select select {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            padding-right: 4px;
+        }
+        .token-select select option {
+            background: #1a1a24;
+            color: #fff;
+        }
+
+        .amount-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            font-family: monospace;
+            padding: 12px;
+            text-align: right;
+            outline: none;
+        }
+
+        .balance-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Execution Outcome */
+        .outcome-value {
+            font-size: 42px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .outcome-unit {
+            font-size: 18px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .outcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-top: 1px solid #1e1e2e;
+        }
+
+        .outcome-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .outcome-data {
+            font-size: 14px;
+            color: #fff;
+            font-family: monospace;
+        }
+
+        .slippage-value {
+            color: #22c55e;
+        }
+
+        .block-range {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
+            font-family: monospace;
+        }
+
+        /* Execution Controls */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: #2a2a3a;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .btn-outline:hover {
+            background-color: #1a1a24;
+            border-color: #3a3a4a;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #16a34a, #166534);
+        }
+
+        .btn-execute {
+            margin-top: 20px;
+            padding: 16px;
+            font-size: 16px;
+        }
+
+        /* Route Breakdown (kept for any future use) */
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .route-token {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .route-item {
+            background-color: #1a1a24;
+            border: 1px solid #2a2a3a;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .route-item.active {
+            border-color: #22c55e;
+            background-color: rgba(34, 197, 94, 0.05);
+        }
+
+        .route-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .route-split {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .route-percent {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .route-protocol {
+            color: #a855f7;
+        }
+
+        .route-slippage {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .route-dest {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .route-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Slippage Surface - tabs in a single horizontal row */
+        .tabs {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 4px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #888;
+        }
+
+        .tab.active {
+            color: #fff;
+            background-color: #1a1a24;
+        }
+
+        #slippage-table {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            min-width: 260px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            color: #666;
+            font-weight: 500;
+            border-bottom: 1px solid #1e1e2e;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #1e1e2e;
+        }
+
+        tr:hover {
+            background-color: #1a1a24;
+        }
+
+        tr.your-trade {
+            background-color: rgba(34, 197, 94, 0.1);
+        }
+
+        tr.your-trade td {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .your-trade-badge {
+            font-size: 10px;
+            background-color: #22c55e;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+
+        .text-green { color: #22c55e; }
+        .text-yellow { color: #eab308; }
+        .text-red { color: #ef4444; }
+        .text-purple { color: #a855f7; }
+        .text-blue { color: #3b82f6; }
+        .mono { font-family: monospace; }
+
+        .table-footer {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        /* DEX Activity */
+        .dex-activity {
+            margin-top: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #1e1e2e;
+            font-size: 13px;
+        }
+
+        .activity-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tx-number {
+            color: #666;
+            font-size: 11px;
+            width: 24px;
+        }
+
+        .activity-type {
+            color: #22c55e;
+        }
+
+        .activity-protocol {
+            color: #888;
+        }
+
+        .activity-bps {
+            font-size: 12px;
+        }
+
+        /* Risk & Confidence */
+        .risk-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #1e1e2e;
+        }
+
+        .risk-label {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .risk-value {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .risk-low { color: #22c55e; }
+        .risk-medium { color: #eab308; }
+        .risk-high { color: #ef4444; }
+
+        .warning-box {
+            background-color: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+        }
+
+        .warning-title {
+            color: #eab308;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .warning-text {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        .stats-box {
+            background-color: #1a1a24;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .stats-highlight {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .outcome-loading {
+            color: #666;
+        }
+        .outcome-loading::after {
+            content: '';
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            margin-left: 6px;
+            border: 2px solid #333;
+            border-top-color: #22c55e;
+            border-radius: 50%;
+            animation: outcome-spin 0.7s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes outcome-spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">BTR</div>
+                Best Trade Router
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Top Bar - minimal, input context only -->
+            <header class="topbar">
+                <div class="pair-title">
+                    <span id="pair-title">Select Token A & B</span>
+                    <span class="network-badge">Ethereum Mainnet</span>
+                </div>
+            </header>
+
+            <!-- Content - horizontal: form left, slippage right -->
+            <div class="content">
+                <div class="content-left">
+                <!-- Trade Configuration -->
+                <div class="card">
+                    <h3 class="card-title">Trade Configuration</h3>
+
+                    <!-- Token A & B: primary input — query/refresh only after both selected -->
+                    <div class="token-pair-row">
+                        <div class="form-group token-pair-group">
+                            <label class="form-label">Token A</label>
+                            <div class="select-box token-select-standalone">
+                                <select id="token-a" title="Token A">
+                                    <option value="">Select token</option>
+                                    <option value="USDC">USDC</option>
+                                    <option value="ETH">ETH</option>
+                                    <option value="USDT">USDT</option>
+                                    <option value="WETH">WETH</option>
+                                    <option value="DAI">DAI</option>
+                                    <option value="WBTC">WBTC</option>
+                                </select>
+                                <span>▼</span>
+                            </div>
+                        </div>
+                        <div class="form-group token-pair-group">
+                            <label class="form-label">Token B</label>
+                            <div class="select-box token-select-standalone">
+                                <select id="token-b" title="Token B">
+                                    <option value="">Select token</option>
+                                    <option value="USDC">USDC</option>
+                                    <option value="ETH">ETH</option>
+                                    <option value="USDT">USDT</option>
+                                    <option value="WETH">WETH</option>
+                                    <option value="DAI">DAI</option>
+                                    <option value="WBTC">WBTC</option>
+                                </select>
+                                <span>▼</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="form-label hint" id="token-pair-hint">Select Token A and Token B to load slippage and outcome.</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Chain</label>
+                        <div class="select-box">
+                            Ethereum Mainnet
+                            <span>▼</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Amount (Token A)</label>
+                        <div class="token-input">
+                            <input type="text" class="amount-input" id="from-amount" value="" placeholder="0.00">
+                        </div>
+                        <div class="balance-info">Balance: --</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Expected (Token B)</label>
+                        <div class="token-input">
+                            <input type="text" class="amount-input" readonly id="to-amount" value="--" placeholder="--">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary btn-execute" id="execute-btn">Execute Trade</button>
+
+                </div>
+
+                <!-- Slippage Surface - all possible slippages for Token A → Token B -->
+                <div class="content-right">
+                <div class="card" style="margin-top: 0;">
+                    <h3 class="card-title">Slippage Surface</h3>
+                    <p class="form-label" style="margin-bottom: 12px;">All possible slippages for <span id="slippage-pair-label">—</span></p>
+                    <div id="slippage-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Slippage</th>
+                                    <th>Max Size</th>
+                                    <th>Rate (Token B per 1 Token A)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="slippage-body">
+                                <tr><td colspan="3" class="loading" id="slippage-placeholder">Select Token A and Token B above to load slippage data.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        Highlighted row indicates where your trade lands on the slippage curve. Rate is how much Token B you get per 1 Token A; Expected Output = your amount × that rate.
+                    </div>
+                </div>
+
+                <!-- Execution Outcome (for this input only) -->
+                <div class="card" style="margin-top: 16px;">
+                    <h3 class="card-title">Execution Outcome <span id="outcome-loading-spinner" class="outcome-loading" style="display: none;"></span></h3>
+
+                    <div style="margin-bottom: 8px;">
+                        <div class="form-label">Expected Output</div>
+                        <div class="outcome-value">
+                            <span id="expected-output">—</span>
+                            <span class="outcome-unit" id="outcome-unit">—</span>
+                        </div>
+                    </div>
+
+                    <div class="outcome-row">
+                        <span class="outcome-label">Guaranteed Minimum</span>
+                        <span class="outcome-data"><span id="guaranteed-min">—</span> <span id="guaranteed-unit">—</span></span>
+                    </div>
+
+                    <div class="outcome-row">
+                        <span class="outcome-label">Max Slippage</span>
+                        <span class="outcome-data slippage-value" id="max-slippage">—</span>
+                    </div>
+
+                    <div class="block-range" id="block-range">
+                        Guarantees valid for block 19,842,771-19,842,773
+                    </div>
+                </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const REFRESH_INTERVAL = {{ refresh_interval }} * 1000;
+        const FALLBACK_PRICE = 2007;
+
+        function getTokenA() { const el = document.getElementById('token-a'); return el ? (el.value || '') : ''; }
+        function getTokenB() { const el = document.getElementById('token-b'); return el ? (el.value || '') : ''; }
+
+        function hasValidPair() {
+            const a = getTokenA();
+            const b = getTokenB();
+            return a && b && a !== b;
+        }
+
+        function updatePairTitle() {
+            const el = document.getElementById('pair-title');
+            const label = document.getElementById('slippage-pair-label');
+            const a = getTokenA();
+            const b = getTokenB();
+            const pair = (a && b) ? (a + ' → ' + b) : 'Select Token A & B';
+            if (el) el.textContent = pair;
+            if (label) label.textContent = (a && b) ? pair : '—';
+        }
+
+        function updateTokenPairHint() {
+            const el = document.getElementById('token-pair-hint');
+            if (!el) return;
+            const a = getTokenA();
+            const b = getTokenB();
+            if (!a && !b) el.textContent = 'Select Token A and Token B to load slippage and outcome.';
+            else if (!a) el.textContent = 'Select Token A.';
+            else if (!b) el.textContent = 'Select Token B.';
+            else if (a === b) el.textContent = 'Token A and Token B must be different.';
+            else el.textContent = 'Slippage and outcome will refresh for this pair.';
+        }
+
+        function updateOutcomeUnits() {
+            const tokenB = getTokenB();
+            const unit = tokenB || '—';
+            const unitEl = document.getElementById('outcome-unit');
+            const guaranteedUnit = document.getElementById('guaranteed-unit');
+            if (unitEl) unitEl.textContent = unit;
+            if (guaranteedUnit) guaranteedUnit.textContent = unit;
+        }
+
+        function parseAmount(val) {
+            const num = parseFloat(String(val).replace(/,/g, '')) || 0;
+            return num;
+        }
+
+        function formatUSD(value) {
+            if (value === null || value === undefined) return '--';
+            if (value >= 1000000) return '$' + (value / 1000000).toFixed(0) + 'M';
+            if (value >= 1000) return '$' + (value / 1000).toFixed(0) + 'k';
+            return '$' + parseFloat(value).toFixed(0);
+        }
+
+        function formatPrice(value) {
+            if (value === null || value === undefined) return '--';
+            const n = parseFloat(value);
+            if (n === 0) return '0.00';
+            const abs = Math.abs(n);
+            if (abs > 0 && abs < 0.0001) return n.toExponential(4);
+            if (abs > 0 && abs < 0.01) return n.toFixed(8);
+            return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function renderSlippageTable(slippageData, tradeAmount) {
+            const tbody = document.getElementById('slippage-body');
+            if (!tbody) return;
+            if (!hasValidPair()) {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading">Select Token A and Token B above to load slippage data.</td></tr>';
+                return;
+            }
+            if (!slippageData || slippageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading">No slippage data for this pair. Try another token pair or wait for data.</td></tr>';
+                return;
+            }
+            const amount = parseAmount(document.getElementById('from-amount') && document.getElementById('from-amount').value);
+            let yourTradeBps = null;
+            if (amount > 0 && slippageData.length) {
+                const sorted = slippageData.slice().sort((a, b) => a.bps - b.bps);
+                const row = sorted.find(s => s.max_amount >= amount) || sorted[sorted.length - 1];
+                yourTradeBps = row ? row.bps : null;
+            }
+            let html = '';
+            slippageData.slice().sort((a, b) => a.bps - b.bps).forEach(item => {
+                const isYourTrade = yourTradeBps !== null && item.bps === yourTradeBps;
+                html += '<tr class="' + (isYourTrade ? 'your-trade' : '') + '">' +
+                    '<td><span class="' + (item.bps <= 10 ? 'text-green' : item.bps <= 30 ? 'text-yellow' : 'text-red') + '">' + item.bps + ' bps</span>' +
+                    (isYourTrade ? ' <span class="your-trade-badge">YOUR TRADE</span>' : '') + '</td>' +
+                    '<td class="mono">' + formatUSD(item.max_amount) + '</td>' +
+                    '<td class="mono">' + formatPrice(item.price) + '</td></tr>';
+            });
+            tbody.innerHTML = html;
+        }
+
+        function setOutcomeLoading(show) {
+            const spinner = document.getElementById('outcome-loading-spinner');
+            const outEl = document.getElementById('expected-output');
+            const toEl = document.getElementById('to-amount');
+            const minEl = document.getElementById('guaranteed-min');
+            const slipEl = document.getElementById('max-slippage');
+            if (show) {
+                if (spinner) spinner.style.display = 'inline-block';
+                if (outEl) outEl.textContent = '...';
+                if (toEl) toEl.value = '—';
+                if (minEl) minEl.textContent = '...';
+                if (slipEl) slipEl.textContent = '...';
+            } else {
+                if (spinner) spinner.style.display = 'none';
+            }
+        }
+
+        function updateTradeOutput(slippageData) {
+            const fromEl = document.getElementById('from-amount');
+            const amount = parseAmount(fromEl && fromEl.value);
+            const tokenB = getTokenB();
+            if (amount <= 0 || !tokenB) {
+                setOutcomeLoading(false);
+                return;
+            }
+
+            let slippagePct = 20 / 10000;
+            let priceBperA = null;
+            if (slippageData && slippageData.length > 0) {
+                const sorted = slippageData.slice().sort((a, b) => a.bps - b.bps);
+                const row = sorted.find(s => s.max_amount >= amount) || sorted[sorted.length - 1];
+                if (row) {
+                    const p = parseFloat(row.price);
+                    if (p != null && !isNaN(p) && p > 0) priceBperA = p;
+                    slippagePct = (row.bps || 20) / 10000;
+                }
+            }
+            const rateBperA = (priceBperA != null && !isNaN(priceBperA) && priceBperA > 0) ? priceBperA : (1 / FALLBACK_PRICE);
+            const expectedOut = amount * rateBperA;
+            const guaranteedOut = expectedOut * (1 - slippagePct);
+
+            function formatOutcome(val) {
+                if (val === 0) return '0.00';
+                if (val > 0 && val < 0.01) return val.toFixed(8);
+                return val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+
+            setOutcomeLoading(false);
+            const outEl = document.getElementById('expected-output');
+            const toEl = document.getElementById('to-amount');
+            const minEl = document.getElementById('guaranteed-min');
+            const slipEl = document.getElementById('max-slippage');
+            if (outEl) outEl.textContent = formatOutcome(expectedOut);
+            if (toEl) toEl.value = expectedOut <= 0 ? '0' : (expectedOut < 0.0001 ? expectedOut.toExponential(4) : expectedOut.toFixed(4));
+            if (minEl) minEl.textContent = formatOutcome(guaranteedOut);
+            if (slipEl) slipEl.textContent = (slippagePct * 100).toFixed(2) + '%';
+            updateOutcomeUnits();
+        }
+
+        async function fetchData() {
+            if (!hasValidPair()) {
+                updateTokenPairHint();
+                renderSlippageTable(null);
+                setOutcomeLoading(false);
+                return;
+            }
+            setOutcomeLoading(true);
+            const tokenA = getTokenA();
+            const tokenB = getTokenB();
+            const url = '/api/data?token_a=' + encodeURIComponent(tokenA) + '&token_b=' + encodeURIComponent(tokenB);
+            try {
+                const tbody = document.getElementById('slippage-body');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="3" class="loading">Loading...</td></tr>';
+                const response = await fetch(url);
+                const data = await response.json();
+                if (!data.success) return;
+
+                if (data.latest_block) {
+                    const blockNum = data.latest_block.toLocaleString();
+                    const rangeEl = document.getElementById('block-range');
+                    if (rangeEl) rangeEl.textContent =
+                        'Guarantees valid for block ' + blockNum + '-' + (data.latest_block + 2).toLocaleString();
+                }
+                window._lastSlippage = data.slippage;
+                updateTradeOutput(data.slippage);
+                renderSlippageTable(data.slippage, parseAmount(document.getElementById('from-amount') && document.getElementById('from-amount').value));
+                updateTokenPairHint();
+            } catch (e) {
+                console.error('Fetch error:', e);
+                const tbody = document.getElementById('slippage-body');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="3" class="loading">Error loading data. Try again.</td></tr>';
+                setOutcomeLoading(false);
+                const outEl = document.getElementById('expected-output');
+                const minEl = document.getElementById('guaranteed-min');
+                const slipEl = document.getElementById('max-slippage');
+                const toEl = document.getElementById('to-amount');
+                if (outEl) outEl.textContent = '—';
+                if (minEl) minEl.textContent = '—';
+                if (slipEl) slipEl.textContent = '—';
+                if (toEl) toEl.value = '—';
+            }
+        }
+
+        document.getElementById('token-a').addEventListener('change', function() {
+            updatePairTitle();
+            updateOutcomeUnits();
+            updateTokenPairHint();
+            fetchData();
+        });
+        document.getElementById('token-b').addEventListener('change', function() {
+            updatePairTitle();
+            updateOutcomeUnits();
+            updateTokenPairHint();
+            fetchData();
+        });
+
+        const fromAmountEl = document.getElementById('from-amount');
+        if (fromAmountEl) {
+            fromAmountEl.addEventListener('input', function() {
+                if (!hasValidPair()) return;
+                setOutcomeLoading(true);
+                const self = this;
+                setTimeout(function() {
+                    updateTradeOutput(window._lastSlippage || null);
+                    if (window._lastSlippage) renderSlippageTable(window._lastSlippage, parseAmount(self.value));
+                }, 0);
+            });
+            fromAmountEl.addEventListener('blur', function() { if (hasValidPair()) fetchData(); });
+        }
+
+        document.getElementById('execute-btn').addEventListener('click', function() {
+            const btn = this;
+            btn.textContent = 'Executing...';
+            btn.disabled = true;
+            setTimeout(function() {
+                alert('Trade execution simulated.\n\nNo actual trade was made.');
+                btn.textContent = 'Execute Trade';
+                btn.disabled = false;
+            }, 2000);
+        });
+
+
+
+        updatePairTitle();
+        updateOutcomeUnits();
+        updateTokenPairHint();
+        fetchData(); // shows placeholder until Token A & B selected
+
+        setInterval(function() {
+            if (hasValidPair()) fetchData();
+        }, REFRESH_INTERVAL);
+    </script>
+</body>
+</html>
