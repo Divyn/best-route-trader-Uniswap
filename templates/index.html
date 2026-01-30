@@ -918,11 +918,11 @@
             return num;
         }
 
-        function formatUSD(value) {
+        function formatAmount(value) {
             if (value === null || value === undefined) return '--';
-            if (value >= 1000000) return '$' + (value / 1000000).toFixed(0) + 'M';
-            if (value >= 1000) return '$' + (value / 1000).toFixed(0) + 'k';
-            return '$' + parseFloat(value).toFixed(0);
+            if (value >= 1000000) return (value / 1000000).toFixed(0) + 'M';
+            if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
+            return parseFloat(value).toFixed(0);
         }
 
         function formatPrice(value) {
@@ -959,7 +959,7 @@
                 html += '<tr class="' + (isYourTrade ? 'your-trade' : '') + '">' +
                     '<td><span class="' + (item.bps <= 10 ? 'text-green' : item.bps <= 30 ? 'text-yellow' : 'text-red') + '">' + item.bps + ' bps</span>' +
                     (isYourTrade ? ' <span class="your-trade-badge">YOUR TRADE</span>' : '') + '</td>' +
-                    '<td class="mono">' + formatUSD(item.max_amount) + '</td>' +
+                    '<td class="mono">' + formatAmount(item.max_amount) + '</td>' +
                     '<td class="mono">' + formatPrice(item.price) + '</td></tr>';
             });
             tbody.innerHTML = html;
